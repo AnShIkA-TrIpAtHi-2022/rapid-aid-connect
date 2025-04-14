@@ -8,19 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter, Calendar, MapPin, User, Building2, Clock } from "lucide-react";
 
-interface RescueOperation {
-  id: string;
-  victimName: string;
-  location: string;
-  emergencyType: string;
-  rescueDate: string;
-  rescueTeam: string[];
-  baseCamp: string;
-  status: "success" | "partial" | "failed";
-  details?: string;
-}
-
-const mockRescueOperations: RescueOperation[] = [
+const mockRescueOperations = [
   {
     id: "res1",
     victimName: "John Smith",
@@ -89,12 +77,12 @@ const mockRescueOperations: RescueOperation[] = [
   }
 ];
 
-const RescueHistory: React.FC = () => {
-  const [rescueOps, setRescueOps] = useState<RescueOperation[]>(mockRescueOperations);
+const RescueHistory = () => {
+  const [rescueOps, setRescueOps] = useState(mockRescueOperations);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [typeFilter, setTypeFilter] = useState<string>("all");
-  const [selectedOperation, setSelectedOperation] = useState<RescueOperation | null>(null);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [selectedOperation, setSelectedOperation] = useState(null);
 
   const filteredOperations = rescueOps.filter(op => {
     const matchesSearch = 
@@ -109,7 +97,7 @@ const RescueHistory: React.FC = () => {
     return matchesSearch && matchesStatus && matchesType;
   });
 
-  const getStatusColor = (status: RescueOperation["status"]) => {
+  const getStatusColor = (status) => {
     switch (status) {
       case "success": return "bg-success text-success-foreground";
       case "partial": return "bg-warning text-warning-foreground";
@@ -118,7 +106,7 @@ const RescueHistory: React.FC = () => {
     }
   };
 
-  const getEmergencyTypeColor = (type: string) => {
+  const getEmergencyTypeColor = (type) => {
     switch (type) {
       case "Medical": return "bg-emergency/10 text-emergency border-emergency/20";
       case "Trapped": return "bg-alert/10 text-alert border-alert/20";
@@ -268,7 +256,7 @@ const RescueHistory: React.FC = () => {
                 <div>
                   <p className="text-sm font-medium">Date & Emergency Type</p>
                   <p className="text-muted-foreground">{selectedOperation.rescueDate}</p>
-                  <Badge className={getEmergencyTypeColor(selectedOperation.emergencyType)} variant="outline" className="mt-1">
+                  <Badge variant="outline" className={getEmergencyTypeColor(selectedOperation.emergencyType)}>
                     {selectedOperation.emergencyType}
                   </Badge>
                 </div>
