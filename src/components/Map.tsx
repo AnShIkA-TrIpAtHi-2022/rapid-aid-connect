@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { getCurrentLocation, getNearbyEntities } from "@/utils/locationService";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, MapPin, Users, Package, Home } from "lucide-react";
+import { Loader2, MapPin, Users, Package, Home, X } from "lucide-react";
 
 // Mock map component - in a real app, you'd use a library like react-leaflet or Google Maps
 const Map: React.FC = () => {

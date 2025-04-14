@@ -3,10 +3,16 @@ import React from "react";
 import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Home, Users, Clock, MapPin, Calendar, LogOut, ArrowLeft } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { LogOut, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Map from "@/components/Map";
+import SOSButton from "@/components/SOSButton";
+import BaseCampManagement from "@/components/BaseCampManagement";
+import SOSRequests from "@/components/SOSRequests";
+import AlertGeneration from "@/components/AlertGeneration";
+import DonorAssignments from "@/components/DonorAssignments";
 
 const VolunteerDashboard: React.FC = () => {
   const { user, logout } = useUser();
@@ -47,141 +53,31 @@ const VolunteerDashboard: React.FC = () => {
       </div>
       
       <main className="container mx-auto px-4 py-8 flex-grow">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-success" /> Upcoming Shifts
-              </CardTitle>
-              <CardDescription>Your scheduled volunteer work</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 border border-border rounded-md bg-card">
-                  <div className="font-medium">No upcoming shifts</div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    You don't have any scheduled volunteer work yet.
-                  </p>
-                </div>
-                
-                <Button className="w-full">
-                  <Calendar className="h-4 w-4 mr-2" /> Sign Up for Shifts
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-info" /> Nearby Opportunities
-              </CardTitle>
-              <CardDescription>Places that need volunteers now</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-3 bg-muted rounded-md">
-                  <div className="font-medium">City Hall Relief Center</div>
-                  <div className="text-sm text-muted-foreground">Downtown San Francisco</div>
-                  <div className="mt-2 flex justify-between text-xs">
-                    <span>Needs: 5 volunteers</span>
-                    <span>2.5 miles away</span>
-                  </div>
-                </div>
-                
-                <div className="p-3 bg-muted rounded-md">
-                  <div className="font-medium">South Bay Emergency Camp</div>
-                  <div className="text-sm text-muted-foreground">San Jose</div>
-                  <div className="mt-2 flex justify-between text-xs">
-                    <span>Needs: 12 volunteers</span>
-                    <span>15 miles away</span>
-                  </div>
-                </div>
-                
-                <Button variant="outline" className="w-full">
-                  View All Opportunities
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Emergency SOS Button */}
+        <div className="mb-6">
+          <SOSButton />
         </div>
         
-        <div className="grid grid-cols-1 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-primary" /> Volunteering History
-              </CardTitle>
-              <CardDescription>
-                Your contributions to disaster relief efforts
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="p-4 border border-border rounded-md bg-card">
-                  <div className="font-medium">No volunteer history</div>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Your volunteer history will appear here once you've completed shifts.
-                  </p>
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                  <div className="bg-primary/10 p-4 rounded-md text-center">
-                    <div className="text-2xl font-bold">0</div>
-                    <div className="text-sm text-muted-foreground">Hours Volunteered</div>
-                  </div>
-                  
-                  <div className="bg-success/10 p-4 rounded-md text-center">
-                    <div className="text-2xl font-bold">0</div>
-                    <div className="text-sm text-muted-foreground">People Helped</div>
-                  </div>
-                  
-                  <div className="bg-alert/10 p-4 rounded-md text-center">
-                    <div className="text-2xl font-bold">0</div>
-                    <div className="text-sm text-muted-foreground">Camps Supported</div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {/* Base Camp Management */}
+          <BaseCampManagement />
           
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Home className="h-5 w-5 text-alert" /> Available Training
-              </CardTitle>
-              <CardDescription>
-                Enhance your skills to help more effectively
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <Card>
-                  <CardContent className="pt-6">
-                    <h3 className="font-medium mb-2">First Aid Basics</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Learn essential first aid skills for emergency situations</p>
-                    <Button variant="outline" className="w-full">Start Training</Button>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <h3 className="font-medium mb-2">Evacuation Procedures</h3>
-                    <p className="text-sm text-muted-foreground mb-4">Safe evacuation techniques for different disaster scenarios</p>
-                    <Button variant="outline" className="w-full">Start Training</Button>
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardContent className="pt-6">
-                    <h3 className="font-medium mb-2">Shelter Management</h3>
-                    <p className="text-sm text-muted-foreground mb-4">How to effectively manage emergency shelters</p>
-                    <Button variant="outline" className="w-full">Start Training</Button>
-                  </CardContent>
-                </Card>
-              </div>
-            </CardContent>
-          </Card>
+          {/* SOS Requests */}
+          <SOSRequests />
+        </div>
+        
+        {/* Interactive Map */}
+        <Card className="mb-8 p-4">
+          <h2 className="text-xl font-semibold mb-4">Emergency Response Map</h2>
+          <Map />
+        </Card>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {/* Alert Generation */}
+          <AlertGeneration />
+          
+          {/* Donor Assignments */}
+          <DonorAssignments />
         </div>
       </main>
       
