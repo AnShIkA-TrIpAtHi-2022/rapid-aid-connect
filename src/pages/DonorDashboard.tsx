@@ -4,9 +4,11 @@ import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Home, Heart, DollarSign, RefreshCw, LogOut, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Map from "@/components/Map";
 
 const DonorDashboard: React.FC = () => {
   const { user, logout } = useUser();
@@ -138,6 +140,34 @@ const DonorDashboard: React.FC = () => {
             </CardContent>
           </Card>
         </div>
+        
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Relief Camp and Volunteer Map</CardTitle>
+            <CardDescription>
+              Track volunteer activity and find nearby relief camps
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[400px] mb-4">
+              <Map />
+            </div>
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Badge variant="outline" className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded-full bg-alert"></div>
+                Relief Camps
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded-full bg-success"></div>
+                Assigned Volunteers
+              </Badge>
+              <Badge variant="outline" className="flex items-center gap-1">
+                <div className="w-3 h-3 rounded-full bg-info"></div>
+                Your Location
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
         
         <Card>
           <CardHeader>

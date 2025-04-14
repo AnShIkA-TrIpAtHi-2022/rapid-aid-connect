@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { AlertTriangle, CheckCircle, Plus, Minus, Building2, Package } from "lucide-react";
+import { AlertTriangle, CheckCircle, Plus, Minus, Building2, Package, X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface Resource {
