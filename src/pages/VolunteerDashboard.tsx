@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { LogOut, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Map from "@/components/Map";
+import MapComponent from "@/components/Map";
 import SOSButton from "@/components/SOSButton";
 import BaseCampManagement from "@/components/BaseCampManagement";
 import SOSRequests from "@/components/SOSRequests";
@@ -19,7 +18,6 @@ const VolunteerDashboard: React.FC = () => {
   const navigate = useNavigate();
 
   if (!user) {
-    // Redirect to home if not logged in
     navigate("/");
     return null;
   }
@@ -53,30 +51,22 @@ const VolunteerDashboard: React.FC = () => {
       </div>
       
       <main className="container mx-auto px-4 py-8 flex-grow">
-        {/* Emergency SOS Button */}
         <div className="mb-6">
           <SOSButton />
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {/* Base Camp Management */}
           <BaseCampManagement />
-          
-          {/* SOS Requests */}
           <SOSRequests />
         </div>
         
-        {/* Interactive Map */}
         <Card className="mb-8 p-4">
           <h2 className="text-xl font-semibold mb-4">Emergency Response Map</h2>
-          <Map />
+          <MapComponent />
         </Card>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          {/* Alert Generation */}
           <AlertGeneration />
-          
-          {/* Donor Assignments */}
           <DonorAssignments />
         </div>
       </main>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AlertCircle, Radio, Users, AlertTriangle, Map as MapIcon, LogOut, ArrowLeft, RefreshCw, Building2, Archive, Filter, Bell } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Map from "@/components/Map";
+import MapComponent from "@/components/Map";
 import BaseCampsList from "@/components/BaseCampsList";
 import RescueHistory from "@/components/RescueHistory";
 import ResponderSOSRequests from "@/components/ResponderSOSRequests";
@@ -21,7 +20,6 @@ const ResponderDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState("emergency");
 
   if (!user) {
-    // Redirect to home if not logged in
     navigate("/");
     return null;
   }
@@ -132,7 +130,7 @@ const ResponderDashboard: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <div className="h-[400px]">
-                  <Map />
+                  <MapComponent />
                 </div>
               </CardContent>
             </Card>

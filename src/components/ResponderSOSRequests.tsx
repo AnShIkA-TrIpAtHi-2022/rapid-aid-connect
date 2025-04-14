@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertTriangle, Search, Filter, MapPin, Clock, User, CheckCircle, UserPlus } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import MapComponent from "@/components/Map";
 
 interface SOSRequest {
   id: string;
@@ -154,7 +154,6 @@ const ResponderSOSRequests: React.FC = () => {
     const volunteer = volunteers.find(v => v.id === volunteerId);
     if (!volunteer) return;
     
-    // Update request status
     setRequests(prevRequests => 
       prevRequests.map(req => {
         if (req.id === requestId) {
@@ -168,7 +167,6 @@ const ResponderSOSRequests: React.FC = () => {
       })
     );
     
-    // Update volunteer availability
     setVolunteers(prevVolunteers =>
       prevVolunteers.map(vol => {
         if (vol.id === volunteerId) {
@@ -489,7 +487,7 @@ const ResponderSOSRequests: React.FC = () => {
         </CardHeader>
         <CardContent>
           <div className="h-[400px]">
-            <Map />
+            <MapComponent />
           </div>
         </CardContent>
       </Card>

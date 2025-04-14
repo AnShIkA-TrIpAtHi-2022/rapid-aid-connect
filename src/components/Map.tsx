@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, MapPin, Users, Package, Home, X } from "lucide-react";
 
 // Mock map component - in a real app, you'd use a library like react-leaflet or Google Maps
-const Map: React.FC = () => {
+const MapComponent: React.FC = () => {
   const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
   const [entities, setEntities] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
@@ -237,4 +237,4 @@ const Map: React.FC = () => {
   );
 };
 
-export default Map;
+export default MapComponent;

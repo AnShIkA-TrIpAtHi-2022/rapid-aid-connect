@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -8,14 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Home, Heart, DollarSign, RefreshCw, LogOut, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Map from "@/components/Map";
+import MapComponent from "@/components/Map";
 
 const DonorDashboard: React.FC = () => {
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
   if (!user) {
-    // Redirect to home if not logged in
     navigate("/");
     return null;
   }
@@ -150,7 +148,7 @@ const DonorDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="h-[400px] mb-4">
-              <Map />
+              <MapComponent />
             </div>
             <div className="flex flex-wrap gap-4 justify-center">
               <Badge variant="outline" className="flex items-center gap-1">

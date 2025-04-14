@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import Header from "@/components/Header";
 import SOSButton from "@/components/SOSButton";
-import Map from "@/components/Map";
+import MapComponent from "@/components/Map";
 import DisasterChart from "@/components/DisasterChart";
 import RescueStats from "@/components/RescueStats";
 import Guidelines from "@/components/Guidelines";
@@ -15,13 +14,10 @@ const Index: React.FC = () => {
   const [locationName, setLocationName] = useState<string | null>(null);
   
   useEffect(() => {
-    // Try to get user's location and reverse geocode it
     const getLocationName = async () => {
       try {
         const coords = await getCurrentLocation();
         
-        // In a real app, use a geocoding service here
-        // For demo purposes, we'll mock a location name
         setLocationName("San Francisco, CA");
       } catch (err) {
         console.error("Could not determine location:", err);
@@ -71,7 +67,7 @@ const Index: React.FC = () => {
                 <CardTitle className="text-lg">Relief Resources Near You</CardTitle>
               </CardHeader>
               <CardContent>
-                <Map />
+                <MapComponent />
               </CardContent>
             </Card>
             

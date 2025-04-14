@@ -1,10 +1,10 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Building2, Users, MapPin, Search, Filter } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import MapComponent from "@/components/Map";
 
 interface BaseCamp {
   id: string;
@@ -249,7 +249,7 @@ const BaseCampsList: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="h-[400px]">
-              <Map />
+              <MapComponent />
             </div>
           </CardContent>
         </Card>
