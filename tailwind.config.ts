@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -24,6 +25,29 @@ export default {
 				ring: 'hsl(var(--ring))',
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
+				
+				// Emergency color scheme
+				emergency: {
+					DEFAULT: '#E63946',  // Red for emergency/SOS
+					foreground: '#FFFFFF'
+				},
+				info: {
+					DEFAULT: '#1D3557',  // Dark blue for information
+					foreground: '#FFFFFF'
+				},
+				alert: {
+					DEFAULT: '#FFD166',  // Yellow for alerts/warnings
+					foreground: '#1D3557'
+				},
+				success: {
+					DEFAULT: '#2A9D8F',  // Teal for success/rescue
+					foreground: '#FFFFFF'
+				},
+				safe: {
+					DEFAULT: '#F1FAEE',  // Light background
+					foreground: '#1D3557'
+				},
+				
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))'
@@ -84,11 +108,22 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'pulse-emergency': {
+					'0%, 100%': {
+						opacity: '1',
+						transform: 'scale(1)'
+					},
+					'50%': {
+						opacity: '0.85',
+						transform: 'scale(1.05)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-emergency': 'pulse-emergency 2s infinite'
 			}
 		}
 	},
