@@ -1,76 +1,100 @@
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { AlertCircle, Clock, MapPin, User, CheckCircle } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
 
 interface SOSRequest {
   id: string;
   name: string;
-  location: string;
+  location: {
+    type: string;
+    coordinates: [number, number];
+    address: string;
+  };
   emergency: string;
   timestamp: string;
   distance: string;
   status: "pending" | "assigned" | "resolved";
 }
 
-const mockSOSRequests: SOSRequest[] = [
-  {
-    id: "sos1",
-    name: "John Smith",
-    location: "Tenderloin District, San Francisco",
-    emergency: "Medical",
-    timestamp: "10 mins ago",
-    distance: "1.2 miles away",
-    status: "pending"
-  },
-  {
-    id: "sos2",
-    name: "Sarah Johnson",
-    location: "Mission District, San Francisco",
-    emergency: "Trapped",
-    timestamp: "15 mins ago",
-    distance: "2.5 miles away",
-    status: "pending"
-  },
-  {
-    id: "sos3",
-    name: "Michael Chen",
-    location: "SoMa, San Francisco",
-    emergency: "Supplies",
-    timestamp: "25 mins ago",
-    distance: "0.8 miles away",
-    status: "pending"
-  }
-];
-
 const SOSRequests: React.FC = () => {
-  const [requests, setRequests] = useState<SOSRequest[]>(mockSOSRequests);
+  const [requests, setRequests] = useState<SOSRequest[]>([]);
   const { toast } = useToast();
 
-  const handleRequestAction = (requestId: string, action: "assign" | "resolve") => {
-    setRequests(prevRequests => 
-      prevRequests.map(req => {
-        if (req.id === requestId) {
-          return { 
-            ...req, 
-            status: action === "assign" ? "assigned" : "resolved" 
-          };
+  // Fetch SOS requests from the backend
+  useEffect(() => {
+    const fetchSOSRequests = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("Unauthorized: No token found");
+          return;
         }
-        return req;
-      })
-    );
 
-    const message = action === "assign" 
-      ? "You've been assigned to this emergency. Please proceed to the location."
-      : "Emergency has been marked as resolved. Thank you for your help.";
-      
-    toast({
-      title: action === "assign" ? "Emergency Assigned" : "Emergency Resolved",
-      description: message,
-    });
+        const { data } = await axios.get("/api/sos", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setRequests(data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch SOS requests:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch SOS requests. Please try again later.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchSOSRequests();
+  }, [toast]);
+
+  // Update SOS request status
+  const updateSOSStatus = async (requestId: string, status: "assigned" | "resolved") => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("Unauthorized: No token found");
+        return;
+      }
+
+      await axios.put(
+        `/api/sos/${requestId}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Update the local state
+      setRequests((prevRequests) =>
+        prevRequests.map((req) =>
+          req.id === requestId ? { ...req, status } : req
+        )
+      );
+
+      toast({
+        title: status === "assigned" ? "Volunteer Assigned" : "SOS Resolved",
+        description:
+          status === "assigned"
+            ? "The SOS request has been assigned to a volunteer."
+            : "The SOS request has been marked as resolved.",
+      });
+    } catch (error) {
+      console.error("Failed to update SOS status:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update SOS status. Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -90,7 +114,7 @@ const SOSRequests: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {requests.map(request => (
+            {requests.map((request) => (
               <div key={request.id} className="border rounded-md p-4 bg-card">
                 <div className="flex items-start justify-between">
                   <div>
@@ -98,11 +122,11 @@ const SOSRequests: React.FC = () => {
                       <User className="h-4 w-4 mr-2" />
                       <span className="font-medium">{request.name}</span>
                     </div>
-                    
+
                     <div className="space-y-1 mt-2">
                       <div className="flex items-center text-sm">
                         <MapPin className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
-                        <span>{request.location}</span>
+                        <span>{request.location.address}</span>
                       </div>
                       <div className="flex items-center text-sm">
                         <Clock className="h-3.5 w-3.5 mr-1.5 text-muted-foreground" />
@@ -111,27 +135,34 @@ const SOSRequests: React.FC = () => {
                     </div>
                   </div>
 
-                  <Badge 
+                  <Badge
                     className={
-                      request.status === "pending" 
-                        ? "bg-emergency" 
-                        : request.status === "assigned" 
-                          ? "bg-info" 
-                          : "bg-success"
+                      request.status === "pending"
+                        ? "bg-emergency"
+                        : request.status === "assigned"
+                        ? "bg-info"
+                        : "bg-success"
                     }
                   >
                     {request.emergency}
                   </Badge>
                 </div>
-                
+
                 <div className="flex mt-3 space-x-2 justify-end">
                   {request.status === "pending" && (
-                    <Button size="sm" onClick={() => handleRequestAction(request.id, "assign")}>
+                    <Button
+                      size="sm"
+                      onClick={() => updateSOSStatus(request.id, "assigned")}
+                    >
                       Respond to Emergency
                     </Button>
                   )}
                   {request.status === "assigned" && (
-                    <Button size="sm" variant="outline" onClick={() => handleRequestAction(request.id, "resolve")}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => updateSOSStatus(request.id, "resolved")}
+                    >
                       <CheckCircle className="h-4 w-4 mr-1" /> Mark as Resolved
                     </Button>
                   )}

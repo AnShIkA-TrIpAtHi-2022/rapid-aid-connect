@@ -1,5 +1,5 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import axios from 'axios';
 
 export type UserRole = 'donor' | 'volunteer' | 'responder';
 
@@ -36,37 +36,43 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Set the base URL for axios
+  axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
+
   // Check if user is already logged in
   useEffect(() => {
-    const storedUser = localStorage.getItem('rapid-aid-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const fetchUser = async () => {
+      try {
+        const { data } = await axios.get('/api/auth/me', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setUser(data.data);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchUser();
+    } else {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   }, []);
 
-  // In a real app, these functions would call your authentication API
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, validate credentials against a backend
-      // For demo purposes, check if user exists in localStorage
-      const users = JSON.parse(localStorage.getItem('rapid-aid-users') || '[]');
-      const foundUser = users.find((u: any) => u.email === email);
-      
-      if (!foundUser || foundUser.password !== password) {
-        throw new Error('Invalid email or password');
-      }
-      
-      const { password: _, ...userWithoutPassword } = foundUser;
-      
-      // Store user in state and localStorage
-      setUser(userWithoutPassword);
-      localStorage.setItem('rapid-aid-user', JSON.stringify(userWithoutPassword));
-      
+      const { data } = await axios.post('/api/auth/login', { email, password });
+      const { token, user: userData } = data;
+
+      // Store token and user data
+      localStorage.setItem('token', token);
+      setUser(userData);
     } catch (error) {
       console.error('Login failed:', error);
       throw error;
@@ -78,34 +84,17 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const signup = async (email: string, password: string, name: string, role: UserRole) => {
     setIsLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // In a real app, this would create a user in your backend
-      // For demo purposes, store in localStorage
-      const users = JSON.parse(localStorage.getItem('rapid-aid-users') || '[]');
-      
-      // Check if email is already taken
-      if (users.some((u: any) => u.email === email)) {
-        throw new Error('Email already in use');
-      }
-      
-      const newUser = {
-        id: `user-${Date.now()}`,
+      const { data } = await axios.post('/api/auth/register', {
         email,
-        password, // In a real app, this would be hashed
+        password,
         name,
-        role
-      };
-      
-      users.push(newUser);
-      localStorage.setItem('rapid-aid-users', JSON.stringify(users));
-      
-      // Store user in state and localStorage (without password)
-      const { password: _, ...userWithoutPassword } = newUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('rapid-aid-user', JSON.stringify(userWithoutPassword));
-      
+        role,
+      });
+      const { token, user: userData } = data;
+
+      // Store token and user data
+      localStorage.setItem('token', token);
+      setUser(userData);
     } catch (error) {
       console.error('Signup failed:', error);
       throw error;
@@ -116,7 +105,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('rapid-aid-user');
+    localStorage.removeItem('token');
   };
 
   return (
